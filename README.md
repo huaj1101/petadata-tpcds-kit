@@ -65,6 +65,7 @@ Query generation is done via `dsqgen` with query templetes, here we use a pre-wr
 
 All supported TPC-DS queries for TiDB are generated in `tools/queries`
 
-## 6. For lazy/advanced users
+## 6. prepare work before query
 
-[load_data.sh](./load_data.sh) can be used to complete step 1~4, look into that file for more details.
+mysql -h 192.168.6.128 -P 4000 -u root -p123 -D tpcds < tools/analyze_tables.sql
+mysql -h 192.168.6.128 -P 4000 -u root -p123 -D tpcds < tools/set_variables.sql

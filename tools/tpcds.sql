@@ -33,13 +33,6 @@
 -- Contributors:
 -- Gradient Systems
 --
-create table dbgen_version
-(
-    dv_version                varchar(16)                   ,
-    dv_create_date            date                          ,
-    dv_create_time            time                          ,
-    dv_cmdline_args           varchar(200)                  
-);
 
 create table customer_address
 (
@@ -57,7 +50,8 @@ create table customer_address
     ca_gmt_offset             decimal(5,2)                  ,
     ca_location_type          char(20)                      ,
     primary key (ca_address_sk)
-);
+)
+DISTRIBUTE_KEY (ca_address_sk);
 
 create table customer_demographics
 (
@@ -71,7 +65,8 @@ create table customer_demographics
     cd_dep_employed_count     integer                       ,
     cd_dep_college_count      integer                       ,
     primary key (cd_demo_sk)
-);
+)
+DISTRIBUTE_KEY (cd_demo_sk);
 
 create table date_dim
 (
@@ -104,7 +99,8 @@ create table date_dim
     d_current_quarter         char(1)                       ,
     d_current_year            char(1)                       ,
     primary key (d_date_sk)
-);
+)
+DISTRIBUTE_KEY (d_date_sk);
 
 create table warehouse
 (
@@ -123,7 +119,8 @@ create table warehouse
     w_country                 varchar(20)                   ,
     w_gmt_offset              decimal(5,2)                  ,
     primary key (w_warehouse_sk)
-);
+)
+DISTRIBUTE_KEY (w_warehouse_sk);
 
 create table ship_mode
 (
@@ -134,7 +131,8 @@ create table ship_mode
     sm_carrier                char(20)                      ,
     sm_contract               char(20)                      ,
     primary key (sm_ship_mode_sk)
-);
+)
+DISTRIBUTE_KEY (sm_ship_mode_sk);
 
 create table time_dim
 (
@@ -149,7 +147,8 @@ create table time_dim
     t_sub_shift               char(20)                      ,
     t_meal_time               char(20)                      ,
     primary key (t_time_sk)
-);
+)
+DISTRIBUTE_KEY (t_time_sk);
 
 create table reason
 (
@@ -157,7 +156,8 @@ create table reason
     r_reason_id               char(16)              not null,
     r_reason_desc             char(100)                     ,
     primary key (r_reason_sk)
-);
+)
+DISTRIBUTE_KEY (r_reason_sk);
 
 create table income_band
 (
@@ -165,7 +165,8 @@ create table income_band
     ib_lower_bound            integer                       ,
     ib_upper_bound            integer                       ,
     primary key (ib_income_band_sk)
-);
+)
+DISTRIBUTE_KEY (ib_income_band_sk);
 
 create table item
 (
@@ -192,7 +193,8 @@ create table item
     i_manager_id              integer                       ,
     i_product_name            char(50)                      ,
     primary key (i_item_sk)
-);
+)
+DISTRIBUTE_KEY (i_item_sk);
 
 create table store
 (
@@ -226,7 +228,8 @@ create table store
     s_gmt_offset              decimal(5,2)                  ,
     s_tax_precentage          decimal(5,2)                  ,
     primary key (s_store_sk)
-);
+)
+DISTRIBUTE_KEY (s_store_sk);
 
 create table call_center
 (
@@ -262,7 +265,8 @@ create table call_center
     cc_gmt_offset             decimal(5,2)                  ,
     cc_tax_percentage         decimal(5,2)                  ,
     primary key (cc_call_center_sk)
-);
+)
+DISTRIBUTE_KEY (cc_call_center_sk);
 
 create table customer
 (
@@ -285,7 +289,8 @@ create table customer
     c_email_address           char(50)                      ,
     c_last_review_date_sk     integer                       ,
     primary key (c_customer_sk)
-);
+)
+DISTRIBUTE_KEY (c_customer_sk);
 
 create table web_site
 (
@@ -316,7 +321,8 @@ create table web_site
     web_gmt_offset            decimal(5,2)                  ,
     web_tax_percentage        decimal(5,2)                  ,
     primary key (web_site_sk)
-);
+)
+DISTRIBUTE_KEY (web_site_sk);
 
 create table store_returns
 (
@@ -341,7 +347,8 @@ create table store_returns
     sr_store_credit           decimal(7,2)                  ,
     sr_net_loss               decimal(7,2)                  ,
     primary key (sr_item_sk, sr_ticket_number)
-);
+)
+DISTRIBUTE_KEY (sr_item_sk);
 
 create table household_demographics
 (
@@ -351,7 +358,8 @@ create table household_demographics
     hd_dep_count              integer                       ,
     hd_vehicle_count          integer                       ,
     primary key (hd_demo_sk)
-);
+)
+DISTRIBUTE_KEY (hd_demo_sk);
 
 create table web_page
 (
@@ -370,7 +378,8 @@ create table web_page
     wp_image_count            integer                       ,
     wp_max_ad_count           integer                       ,
     primary key (wp_web_page_sk)
-);
+)
+DISTRIBUTE_KEY (wp_web_page_sk);
 
 create table promotion
 (
@@ -394,7 +403,8 @@ create table promotion
     p_purpose                 char(15)                      ,
     p_discount_active         char(1)                       ,
     primary key (p_promo_sk)
-);
+)
+DISTRIBUTE_KEY (p_promo_sk);
 
 create table catalog_page
 (
@@ -408,7 +418,8 @@ create table catalog_page
     cp_description            varchar(100)                  ,
     cp_type                   varchar(100)                  ,
     primary key (cp_catalog_page_sk)
-);
+)
+DISTRIBUTE_KEY (cp_catalog_page_sk);
 
 create table inventory
 (
@@ -417,7 +428,8 @@ create table inventory
     inv_warehouse_sk          integer               not null,
     inv_quantity_on_hand      integer                       ,
     primary key (inv_date_sk, inv_item_sk, inv_warehouse_sk)
-);
+)
+DISTRIBUTE_KEY (inv_date_sk);
 
 create table catalog_returns
 (
@@ -449,7 +461,8 @@ create table catalog_returns
     cr_store_credit           decimal(7,2)                  ,
     cr_net_loss               decimal(7,2)                  ,
     primary key (cr_item_sk, cr_order_number)
-);
+)
+DISTRIBUTE_KEY (cr_item_sk);
 
 create table web_returns
 (
@@ -478,7 +491,8 @@ create table web_returns
     wr_account_credit         decimal(7,2)                  ,
     wr_net_loss               decimal(7,2)                  ,
     primary key (wr_item_sk, wr_order_number)
-);
+)
+DISTRIBUTE_KEY (wr_item_sk);
 
 create table web_sales
 (
@@ -517,7 +531,8 @@ create table web_sales
     ws_net_paid_inc_ship_tax  decimal(7,2)                  ,
     ws_net_profit             decimal(7,2)                  ,
     primary key (ws_item_sk, ws_order_number)
-);
+)
+DISTRIBUTE_KEY (ws_item_sk);
 
 create table catalog_sales
 (
@@ -556,7 +571,8 @@ create table catalog_sales
     cs_net_paid_inc_ship_tax  decimal(7,2)                  ,
     cs_net_profit             decimal(7,2)                  ,
     primary key (cs_item_sk, cs_order_number)
-);
+)
+DISTRIBUTE_KEY (cs_item_sk);
 
 create table store_sales
 (
@@ -584,5 +600,6 @@ create table store_sales
     ss_net_paid_inc_tax       decimal(7,2)                  ,
     ss_net_profit             decimal(7,2)                  ,
     primary key (ss_item_sk, ss_ticket_number)
-);
+)
+DISTRIBUTE_KEY (ss_item_sk);
 
