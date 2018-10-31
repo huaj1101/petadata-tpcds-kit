@@ -21,7 +21,7 @@ Make sure the required development tools are installed:
 
 ### 1.2 clone the code
 
-`git clone https://github.com/huaj1101/tidb-tpcds-kit.git`
+`git clone https://github.com/huaj1101/petadata-tpcds-kit.git`
 
 ### 1.3 build
 
@@ -37,10 +37,9 @@ cd tools && ./dsdgen -sc 100 -f && cd -
 ```
 
 ## 3. DataBase and Table schema generation
+create database tpcds in petadata first, user name: htap, passwd: AAbb1234
 ```sh
-mysql -h 192.168.6.128 -P 4000 -u root -p123 -D test -e "drop database if exists tpcds;"
-mysql -h 192.168.6.128 -P 4000 -u root -p123 -D test -e "create database tpcds;"
-mysql -h 192.168.6.128 -P 4000 -u root -p123 -D tpcds < tools/tpcds.sql
+mysql -h pd-2ze37xe0ba465f75o.petadata.rds.aliyuncs.com -u htap -pAAbb1234 -D tpcds < tools/tpcds.sql
 ```
 
 
@@ -52,7 +51,7 @@ for file_name in `ls tools/*.dat`; do
     table_file=$(echo "${file_name##*/}")
     table_name=$(echo "${table_file%.*}" | tr '[:lower:]' '[:upper:]')
     load_data_sql="LOAD DATA LOCAL INFILE '$file_name' INTO TABLE $table_name FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';"
-    nohup mysql -h 192.168.6.128 -P 4000 -u root -p123 --local-infile=1 -D tpcds -e "$load_data_sql" >> load_data.log 2>&1 &
+    nohup mysql -h pd-2ze37xe0ba465f75o.petadata.rds.aliyuncs.com -u htap -pAAbb1234 --local-infile=1 -D tpcds -e "$load_data_sql" >> load_data.log 2>&1 &
 done
 ```
 
@@ -65,6 +64,6 @@ Query generation is done via `dsqgen` with query templetes, here we use a pre-wr
 
 All supported TPC-DS queries for TiDB are generated in `tools/queries`
 
-## 6. For lazy/advanced users
+## 6. prepare work before query
 
-[load_data.sh](./load_data.sh) can be used to complete step 1~4, look into that file for more details.
+mysql -h pd-2ze37xe0ba465f75o.petadata.rds.aliyuncs.com -u htap -pAAbb1234 -D tpcds < tools/analyze_tables.sql
