@@ -36,17 +36,27 @@ Data generation is done via `dsdgen`:
 cd tools && ./dsdgen -sc 100 -f && cd -
 ```
 
-## 3. DataBase and Table schema generation
-create database tpcds in petadata first, user name: htap, passwd: AAbb1234
-```sh
-mysql -h pd-2ze37xe0ba465f75o.petadata.rds.aliyuncs.com -u htap -pAAbb1234 -D tpcds < tools/tpcds.sql
-```
+## 3. Load data into mysql first
+The mysql should on ecs, in the same zone with petadata
 
-
-## 4. Load Data
 ```sh
+mysql -u root -p123 -e "drop database if exists tpcds;"
+mysql -u root -p123 -e "create database tpcds;"
+mysql -u root -p123 -D tpcds < tools/tpcds_mysql.sql
 ./load_data.sh
 ```
+The load data step may take hours
+
+## 4. Load Data into petadata
+Create database tpcds in petadata first, user name: htap, passwd: AAbb1234
+
+Create tables in petadata:
+```sh
+mysql -h pd-2ze37xe0ba465f75o.petadata.rds.aliyuncs.com -u htap -pAAbb1234 -D tpcds < tools/tpcds.sql
+./load_data.sh
+```
+
+Use aliyun dms service to transmit from mysql to petadata
 
 ## 5. Query generation
 
@@ -57,6 +67,3 @@ Query generation is done via `dsqgen` with query templetes, here we use a pre-wr
 
 All supported TPC-DS queries for TiDB are generated in `tools/queries`
 
-## 6. prepare work before query
-
-mysql -h pd-2ze37xe0ba465f75o.petadata.rds.aliyuncs.com -u htap -pAAbb1234 -D tpcds < tools/analyze_tables.sql
